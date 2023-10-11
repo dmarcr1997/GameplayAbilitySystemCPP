@@ -3,11 +3,67 @@
 
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
+#include "Interaction/EnemyInterface.h"
 #include "EnhancedInputComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	CursorTrace();
+}
+
+void AAuraPlayerController::CursorTrace()
+{	
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if (!CursorHit.bBlockingHit) return;
+
+	LastActor = ThisActor;
+
+	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
+
+	/** 
+		Line Trace from cursor scenarios
+		A. both actors are null last/this
+			- Do nothing
+		B. Last actor is null this actor is valid
+			- call HighLight actor on this actor
+			- Set LastActor to ThisActor
+		C. Last Actor is valid and this actor is null
+			- call unhighlight on last actor
+		D. Both actors are valid but LastActor != ThisActor
+			- UnHighlight LastActor
+			- HighLight ThisActor
+		E. Both actors are valid and ==
+			- do nothing
+	*/
+
+	if (LastActor == nullptr) {
+		if (ThisActor != nullptr) {
+			//Case B
+			ThisActor->HighlightActor();
+		}
+		//A else do nothing
+	}
+	else {
+		if (ThisActor == nullptr) {
+			//C
+			LastActor->UnHighlightActor();
+		}
+		else {
+			if (LastActor != ThisActor) {
+				//D
+				LastActor->UnHighlightActor();
+				ThisActor->HighlightActor();
+			}
+			//E same actor do nothing
+		}
+	}
 }
 
 void AAuraPlayerController::BeginPlay()
