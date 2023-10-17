@@ -1,4 +1,4 @@
-// Copyright  Mossy Games
+// Copyright Druid Mechanics
 
 #pragma once
 
@@ -8,24 +8,20 @@
 #include "AuraEnemy.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class AURA_API AAuraEnemy : public AAuraCharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
-
 public:
 	AAuraEnemy();
 
-	/**Enemy interface*/
+	/** Enemy Interface */
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
-	/**End Enemy interface*/
+	/** end Enemy Interface */
 
-
-
-protected: 
+protected:
 	virtual void BeginPlay() override;
-	
 };

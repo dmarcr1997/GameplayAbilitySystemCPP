@@ -1,4 +1,4 @@
-// Copyright  Mossy Games
+// Copyright Druid Mechanics
 
 #pragma once
 
@@ -19,10 +19,10 @@ public:
 	AAuraCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-
 protected:
+	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category="Combat")
+	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	UPROPERTY()
@@ -30,7 +30,4 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
-
-
-	virtual void BeginPlay() override;
 };
